@@ -1,13 +1,13 @@
 {
   "name": "istoq",
   "version": "1.0.0",
-  "description": "",
+  "description": "sales management and control application",
   "scripts": {
     "test": "jest --passWithNoTests --runInBand",
     "test:staged": "npm run test --"
   },
   "keywords": [],
-  "author": "",
+  "author": "Carlos Daniel",
   "license": "ISC",
   "devDependencies": {
     "@types/faker": "^5.1.2",

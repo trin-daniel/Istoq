@@ -1,5 +1,6 @@
 import { SignUpController } from './signup-controller'
 import { HttpRequest } from '../../protocols/http'
+import { badRequest } from '../../helpers/http/http-helpers'
 import { MissingParamError } from '../../errors'
 import { internet } from 'faker'
 
@@ -17,15 +18,13 @@ describe('SignUp Controller', () => {
     const sut = new SignUpController()
     const httpRequest = { body: { ...mockRequest.body, name: undefined } }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('name'))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
   })
 
   test('Should return 400 if no email is provided', () => {
     const sut = new SignUpController()
     const httpRequest = { body: { ...mockRequest.body, email: undefined } }
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('email'))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
   })
 })

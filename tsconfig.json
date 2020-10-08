@@ -7,7 +7,7 @@
     "outDir": "./dist",                        
     "rootDir": "./src",                       
     "strict": true,                           
-    "noImplicitAny": true,                 
+    "noImplicitAny": false,                 
     "strictNullChecks": false,             
     "esModuleInterop": true,                  
     "skipLibCheck": true,

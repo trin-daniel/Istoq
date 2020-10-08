@@ -1,9 +1,7 @@
 import { SignUpController } from './signup-controller'
-import { HttpRequest, EmailValidator } from '../../protocols'
+import { AccountModel, AddAccount, AddAccountParams, EmailValidator, HttpRequest } from './signup-controller-protocols'
 import { badRequest, serverError } from '../../helpers/http/http-helpers'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { AccountModel } from '../../../domain/models/account-model'
-import { AddAccount, AddAccountParams } from '../../../domain/use-cases/add-account'
 import { internet, random } from 'faker'
 
 type SutTypes = {

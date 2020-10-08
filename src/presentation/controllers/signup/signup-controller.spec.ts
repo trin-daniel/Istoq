@@ -1,6 +1,6 @@
 import { SignUpController } from './signup-controller'
 import { AccountModel, AddAccount, AddAccountParams, EmailValidator, HttpRequest } from './signup-controller-protocols'
-import { badRequest, serverError } from '../../helpers/http/http-helpers'
+import { badRequest, ok, serverError } from '../../helpers/http/http-helpers'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { internet, random } from 'faker'
 
@@ -142,7 +142,6 @@ describe('SignUp Controller', () => {
     const { sut } = makeSut()
     const httpRequest = mockRequest
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual(mockAccount)
+    expect(httpResponse).toEqual(ok(mockAccount))
   })
 })

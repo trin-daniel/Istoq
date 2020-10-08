@@ -129,4 +129,12 @@ describe('SignUp Controller', () => {
       password: httpRequest.body.password
     })
   })
+
+  test('Should return 500 if AddAccount throws', () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => { throw new Error() })
+    const httpRequest = mockRequest
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError())
+  })
 })

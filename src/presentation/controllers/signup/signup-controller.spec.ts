@@ -1,8 +1,8 @@
 import { SignUpController } from './signup-controller'
 import { HttpRequest } from '../../protocols/http'
 import { EmailValidator } from '../../protocols/email-validator'
-import { badRequest } from '../../helpers/http/http-helpers'
-import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
+import { badRequest, serverError } from '../../helpers/http/http-helpers'
+import { InvalidParamError, MissingParamError } from '../../errors'
 import { internet } from 'faker'
 
 type SutTypes = {
@@ -87,7 +87,6 @@ describe('SignUp Controller', () => {
     jest.spyOn(emailValidatorStub, 'isEmail').mockImplementationOnce(() => { throw new Error() })
     const httpRequest = mockRequest
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse).toEqual(serverError())
   })
 })

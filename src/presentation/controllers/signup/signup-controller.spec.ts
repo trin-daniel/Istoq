@@ -137,4 +137,12 @@ describe('SignUp Controller', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError())
   })
+
+  test('Should return 200 if valid data is provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual(mockAccount)
+  })
 })

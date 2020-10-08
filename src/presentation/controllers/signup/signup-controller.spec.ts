@@ -9,12 +9,13 @@ type SutTypes = {
   emailValidatorStub: EmailValidator
 }
 
+const passwordFreeze = internet.password()
 const mockRequest: HttpRequest<any> = {
   body: {
     name: internet.userName(),
     email: internet.email(),
-    password: internet.password(),
-    confirmation: internet.password()
+    password: passwordFreeze,
+    confirmation: passwordFreeze
   }
 }
 
@@ -63,6 +64,13 @@ describe('SignUp Controller', () => {
     const httpRequest = { body: { ...mockRequest.body, confirmation: undefined } }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissingParamError('confirmation')))
+  })
+
+  test('Should return 400 if password confirmation fails', () => {
+    const { sut } = makeSut()
+    const httpRequest = { body: { ...mockRequest.body, confirmation: 'another_value' } }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('confirmation')))
   })
 
   test('Should return 400 if an invalid email is provided', () => {

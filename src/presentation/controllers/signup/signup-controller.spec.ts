@@ -1,6 +1,5 @@
 import { SignUpController } from './signup-controller'
-import { HttpRequest } from '../../protocols/http'
-import { EmailValidator } from '../../protocols/email-validator'
+import { HttpRequest, EmailValidator } from '../../protocols'
 import { badRequest, serverError } from '../../helpers/http/http-helpers'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { internet } from 'faker'

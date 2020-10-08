@@ -1,7 +1,8 @@
 import { SignUpController } from './signup-controller'
+import { HttpRequest } from '../../protocols/http'
 import { internet } from 'faker'
 
-const mockRequest = {
+const mockRequest: HttpRequest<any> = {
   body: {
     name: internet.userName(),
     email: internet.email(),

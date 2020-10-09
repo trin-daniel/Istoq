@@ -17,6 +17,7 @@ const params = {
   email: internet.email(),
   password: internet.password()
 }
+
 const mockAccount: AccountModel = {
   id: random.uuid(),
   ...params,
@@ -74,5 +75,12 @@ describe('DbAddAccount Usecase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
     await sut.add(params)
     expect(addSpy).toHaveBeenCalledWith({ ...params, password: hashedPassword })
+  })
+
+  test('Should throw if AddAccountRepository throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
+    const promise = sut.add(params)
+    await expect(promise).rejects.toThrow()
   })
 })

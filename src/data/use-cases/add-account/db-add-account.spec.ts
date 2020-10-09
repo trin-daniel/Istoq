@@ -1,8 +1,5 @@
 import { DbAddAccount } from './db-add-account'
-import { Hasher } from '../../protocols/hasher'
-import { AccountModel } from '../../../domain/models/account-model'
-import { AddAccountParams } from '../../../domain/use-cases/add-account'
-import { AddAccountRepository } from '../../protocols/add-account-repository'
+import { AccountModel, AddAccountParams, AddAccountRepository, Hasher } from './db-add-account-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {

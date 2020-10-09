@@ -4,13 +4,15 @@
     "module": "commonjs",                     
     "allowJs": true,                       
     "sourceMap": true,                                     
-    "outDir": "./dist",                        
-    "rootDir": "./src",                       
+    "outDir": "dist",                        
+    "rootDir": "src",                       
     "strict": true,                           
     "noImplicitAny": false,                 
     "strictNullChecks": false,             
     "esModuleInterop": true,                  
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true  
-  }
+  },
+  "include":["src"],
+  "exclude": ["**/*.spec.ts"]
 }

@@ -3,6 +3,7 @@ import { internet } from 'faker'
 import validator from 'validator'
 
 const email = internet.email()
+
 jest.mock('validator', () => ({
   isEmail (): boolean {
     return true
@@ -21,5 +22,12 @@ describe('EmailValidator Adapter', () => {
     const sut = new EmailValidatorAdapter()
     const isEmail = sut.isEmail(email)
     expect(isEmail).toBe(true)
+  })
+
+  test('Should call validator with correct email', () => {
+    const sut = new EmailValidatorAdapter()
+    const isEmailSpy = jest.spyOn(validator, 'isEmail')
+    sut.isEmail(email)
+    expect(isEmailSpy).toHaveBeenCalledWith(email)
   })
 })

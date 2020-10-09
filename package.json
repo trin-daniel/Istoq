@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "sales management and control application",
   "scripts": {
-    "test": "jest --passWithNoTests --runInBand",
-    "test:staged": "npm run test --"
+    "test": "jest --passWithNoTests --runInBand --silent --noStackTrace",
+    "test:verbose":"jest --passWithNoTests --runInBand",
+    "test:unit":"npm run test -- --watch -c jest-unit-config.js",
+    "test:integration":"npm run test -- --watch -c jest-integration-config.js",
+    "test:staged": "npm run test -- --findRelatedTests",
+    "test:ci":"npm run test -- --coverage"
   },
   "keywords": [],
   "author": "Carlos Daniel",

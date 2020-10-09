@@ -1,10 +1,14 @@
 import { DbAddAccount } from './db-add-account'
 import { Hasher } from '../../protocols/hasher'
-import { internet } from 'faker'
+import { AccountModel } from '../../../domain/models/account-model'
+import { AddAccountParams } from '../../../domain/use-cases/add-account'
+import { AddAccountRepository } from '../../protocols/add-account-repository'
+import { internet, random } from 'faker'
 
 type SutTypes = {
   sut: DbAddAccount
   hasherStub: Hasher
+  addAccountRepositoryStub: AddAccountRepository
 }
 
 const hashedPassword = internet.password()
@@ -12,6 +16,13 @@ const params = {
   name: internet.userName(),
   email: internet.email(),
   password: internet.password()
+}
+const mockAccount: AccountModel = {
+  id: random.uuid(),
+  ...params,
+  password: hashedPassword,
+  created_at: new Date(),
+  updated_at: new Date()
 }
 
 const mockHasher = (): Hasher => {
@@ -23,12 +34,23 @@ const mockHasher = (): Hasher => {
   return new HasherStub()
 }
 
+const mockAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add (params: AddAccountParams): Promise<AccountModel> {
+      return Promise.resolve(mockAccount)
+    }
+  }
+  return new AddAccountRepositoryStub()
+}
+
 const makeSut = (): SutTypes => {
+  const addAccountRepositoryStub = mockAddAccountRepository()
   const hasherStub = mockHasher()
-  const sut = new DbAddAccount(hasherStub)
+  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
   return {
     sut,
-    hasherStub
+    hasherStub,
+    addAccountRepositoryStub
   }
 }
 
@@ -45,5 +67,12 @@ describe('DbAddAccount Usecase', () => {
     jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(Promise.reject(new Error()))
     const promise = sut.add(params)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+    await sut.add(params)
+    expect(addSpy).toHaveBeenCalledWith({ ...params, password: hashedPassword })
   })
 })

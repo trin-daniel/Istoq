@@ -8,6 +8,10 @@ const params = {
   password: internet.password()
 }
 
+const makeSut = (): AccountRepository => {
+  return new AccountRepository()
+}
+
 describe('Account Repository', () => {
   beforeAll(async () => {
     await SqlHelper.getConnection()
@@ -18,7 +22,7 @@ describe('Account Repository', () => {
   })
 
   test('Should return an account on add with success', async () => {
-    const sut = new AccountRepository()
+    const sut = makeSut()
     const account = await sut.add(params)
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()

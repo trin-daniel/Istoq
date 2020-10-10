@@ -21,6 +21,14 @@ describe('Account Repository', () => {
     await SqlHelper.end()
   })
 
+  beforeEach(async () => {
+    await SqlHelper.query('truncate table accounts')
+  })
+
+  afterEach(async () => {
+    await SqlHelper.query('truncate table accounts')
+  })
+
   test('Should return an account on add with success', async () => {
     const sut = makeSut()
     const account = await sut.add(params)

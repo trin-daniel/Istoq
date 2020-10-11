@@ -1,8 +1,21 @@
 import { app } from '../config/app'
-import request from 'supertest'
+import { SqlHelper } from '../../infra/database/helpers/sql-helper'
 import { internet } from 'faker'
+import request from 'supertest'
 
 describe('SignUp Routes', () => {
+  beforeAll(async () => {
+    await SqlHelper.getConnection()
+  })
+
+  afterAll(async () => {
+    await SqlHelper.end()
+  })
+
+  beforeEach(async () => {
+    await SqlHelper.query('truncate table accounts')
+  })
+
   test('Should return an account on success', async () => {
     const url = '/api/signup'
     const passwordFreeze = internet.password()

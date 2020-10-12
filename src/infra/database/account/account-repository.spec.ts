@@ -14,19 +14,19 @@ const makeSut = (): AccountRepository => {
 
 describe('Account Repository', () => {
   beforeAll(async () => {
-    await SqlHelper.getConnection()
+    await SqlHelper.connect()
   })
 
   afterAll(async () => {
-    await SqlHelper.end()
+    await SqlHelper.disconnect()
   })
 
   beforeEach(async () => {
-    await SqlHelper.query('truncate table accounts')
+    await SqlHelper.runQuery('truncate table accounts')
   })
 
   afterEach(async () => {
-    await SqlHelper.query('truncate table accounts')
+    await SqlHelper.runQuery('truncate table accounts')
   })
 
   test('Should return an account on add with success', async () => {

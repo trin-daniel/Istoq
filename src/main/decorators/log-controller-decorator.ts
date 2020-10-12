@@ -7,7 +7,7 @@ export class LogControllerDecorator implements Controller {
   }
 
   async handle (httpRequest: HttpRequest<any>): Promise<HttpResponse<any>> {
-    await this.controller.handle(httpRequest)
-    return Promise.resolve(null)
+    const httpResponse = await this.controller.handle(httpRequest)
+    return httpResponse
   }
 }

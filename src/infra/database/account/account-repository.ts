@@ -9,12 +9,12 @@ export class AccountRepository implements AddAccountRepository {
     const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
     const created_at = new Date()
     const updated_at = new Date()
-    await SqlHelper.query(
+    await SqlHelper.runQuery(
       'INSERT INTO accounts (id, name, email, password, created_at, updated_at) VALUES(?,?,?,?,?,?)',
       [id, name, email, password, created_at, updated_at]
     )
 
-    const account = await SqlHelper.query('SELECT * FROM accounts WHERE id = (?)', [id])
+    const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE id = (?)', [id])
     return account[0][0]
   }
 }

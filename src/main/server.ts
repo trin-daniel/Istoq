@@ -3,7 +3,7 @@ import { app } from './config/app'
 import { config as dotenv } from 'dotenv'
 dotenv()
 
-SqlHelper.getConnection()
+SqlHelper.connect()
   .then(() => {
     app.listen(process.env.PORT, () => console.info(`Server running at http://localhost:${process.env.PORT}`))
   })

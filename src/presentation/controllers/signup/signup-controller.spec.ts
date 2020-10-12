@@ -122,7 +122,7 @@ describe('SignUp Controller', () => {
     jest.spyOn(emailValidatorStub, 'isEmail').mockImplementationOnce(() => { throw new Error() })
     const httpRequest = mockRequest
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('Should call AddAccount with correct values', async () => {
@@ -142,7 +142,7 @@ describe('SignUp Controller', () => {
     jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
     const httpRequest = mockRequest
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('Should return 200 if valid data is provided', async () => {

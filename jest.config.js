@@ -2,7 +2,12 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/main/**',
+    '!<rootDir>/src/**/*-protocols.ts',
+    '!**/protocols/**'
+  ],
   roots: ['<rootDir>/src'],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',

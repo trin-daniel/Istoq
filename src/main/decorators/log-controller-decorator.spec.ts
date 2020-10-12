@@ -7,8 +7,15 @@ type SutTypes = {
   controllerStub: Controller
 }
 
+type BodyParams = {
+  name: string
+  email: string
+  password: string
+  confirmation: string
+}
+
 const passwordFreeze = internet.password()
-const mockHttpRequest: HttpRequest<any> = {
+const mockHttpRequest: HttpRequest<BodyParams> = {
   body:
    {
      name: internet.userName(),
@@ -18,7 +25,7 @@ const mockHttpRequest: HttpRequest<any> = {
    }
 }
 
-const mockHttpResponse: HttpResponse<any> = {
+const mockHttpResponse: HttpResponse<any | Error> = {
   statusCode: 200,
   body:
    {

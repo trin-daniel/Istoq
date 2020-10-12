@@ -10,15 +10,8 @@ type SutTypes = {
   addAccountStub: AddAccount
 }
 
-type BodyParams = {
-  name: string
-  email: string
-  password: string
-  confirmation: string
-}
-
 const passwordFreeze = internet.password()
-const mockRequest: HttpRequest<BodyParams> = {
+const mockRequest: HttpRequest = {
   body: {
     name: internet.userName(),
     email: internet.email(),

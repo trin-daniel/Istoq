@@ -11,12 +11,7 @@ type SutTypes = {
 }
 
 const passwordFreeze = internet.password()
-const mockHttpRequest: HttpRequest<{
-  name: string
-  email: string
-  password: string
-  confirmation: string
-}> = {
+const mockHttpRequest: HttpRequest = {
   body:
    {
      name: internet.userName(),
@@ -26,7 +21,7 @@ const mockHttpRequest: HttpRequest<{
    }
 }
 
-const mockHttpResponse: HttpResponse<any | Error> = {
+const mockHttpResponse: HttpResponse = {
   statusCode: 200,
   body:
    {
@@ -37,7 +32,7 @@ const mockHttpResponse: HttpResponse<any | Error> = {
 
 const mockController = (): Controller => {
   class ControllerStub implements Controller {
-    async handle (request: HttpRequest<any>): Promise<HttpResponse<any>> {
+    async handle (request: HttpRequest): Promise<HttpResponse> {
       const httpResponse = mockHttpResponse
       return Promise.resolve(httpResponse)
     }

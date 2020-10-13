@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 
 export const expressRouterAdapter = (controller: Controller) => {
   return async (req: Request, res: Response) => {
-    const httpRequest: HttpRequest<any> = {
+    const httpRequest: HttpRequest = {
       body: req.body
     }
     const httpResponse = await controller.handle(httpRequest)

@@ -1,10 +1,10 @@
 import { AddAccountRepository } from '../../../data/protocols/add-account-repository'
-import { AccountModel } from '../../../domain/models/account-model'
+import { Account } from '../../../domain/models/account'
 import { AddAccountParams } from '../../../domain/use-cases/add-account'
 import { SqlHelper } from '../helpers/sql-helper'
 
 export class AccountRepository implements AddAccountRepository {
-  async add (params: AddAccountParams): Promise<AccountModel> {
+  async add (params: AddAccountParams): Promise<Account> {
     const { name, email, password } = params
     const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
     const created_at = new Date()

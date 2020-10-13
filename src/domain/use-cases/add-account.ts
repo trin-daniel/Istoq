@@ -1,4 +1,4 @@
-import { AccountModel } from '../models/account-model'
+import { Account } from '../models/account'
 
 export type AddAccountParams = {
   name: string
@@ -7,5 +7,5 @@ export type AddAccountParams = {
 }
 
 export interface AddAccount {
-  add (params: AddAccountParams): Promise<AccountModel>
+  add (params: AddAccountParams): Promise<Account>
 }

@@ -1,5 +1,5 @@
 import { DbAddAccount } from './db-add-account'
-import { AccountModel, AddAccountParams, AddAccountRepository, Hasher } from './db-add-account-protocols'
+import { Account, AddAccountParams, AddAccountRepository, Hasher } from './db-add-account-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {
@@ -15,9 +15,10 @@ const params = {
   password: internet.password()
 }
 
-const mockAccount: AccountModel = {
+const mockAccount = {
   id: random.uuid(),
-  ...params,
+  name: params.name,
+  email: params.email,
   password: hashedPassword,
   created_at: new Date(),
   updated_at: new Date()
@@ -34,7 +35,7 @@ const mockHasher = (): Hasher => {
 
 const mockAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    async add (params: AddAccountParams): Promise<AccountModel> {
+    async add (params: AddAccountParams): Promise<Account> {
       return Promise.resolve(mockAccount)
     }
   }

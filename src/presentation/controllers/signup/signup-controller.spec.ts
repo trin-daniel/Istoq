@@ -1,5 +1,5 @@
 import { SignUpController } from './signup-controller'
-import { AccountModel, AddAccount, AddAccountParams, EmailValidator, HttpRequest } from './signup-controller-protocols'
+import { Account, AddAccount, AddAccountParams, EmailValidator, HttpRequest } from './signup-controller-protocols'
 import { badRequest, ok, serverError } from '../../helpers/http/http-helpers'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { internet, random } from 'faker'
@@ -40,7 +40,7 @@ const mockEmailValidator = (): EmailValidator => {
 
 const mockAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (params: AddAccountParams): Promise<AccountModel> {
+    async add (params: AddAccountParams): Promise<Account> {
       return Promise.resolve(mockAccount)
     }
   }

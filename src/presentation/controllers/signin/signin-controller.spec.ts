@@ -1,8 +1,7 @@
 import { SignInController } from './signin-controller'
 import { badRequest, serverError, unauthorized } from '../../helpers/http/http-helpers'
-import { EmailValidator } from '../../protocols'
-import { Authentication } from '../../../domain/use-cases/authentication'
 import { InvalidParamError, MissingParamError } from '../../errors'
+import { Authentication, EmailValidator, HttpRequest } from './signin-controller-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {
@@ -11,7 +10,7 @@ type SutTypes = {
   authenticationStub: Authentication
 }
 
-const mockHttpRequest = {
+const mockHttpRequest: HttpRequest = {
   body: {
     email: internet.email(),
     password: internet.password()

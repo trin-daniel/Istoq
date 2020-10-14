@@ -1,7 +1,7 @@
 import { SignInController } from './signin-controller'
-import { badRequest, serverError, unauthorized } from '../../helpers/http/http-helpers'
-import { InvalidParamError, MissingParamError } from '../../errors'
+import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/http-helpers'
 import { Authentication, EmailValidator, HttpRequest } from './signin-controller-protocols'
+import { InvalidParamError, MissingParamError } from '../../errors'
 import { internet, random } from 'faker'
 
 type SutTypes = {
@@ -17,7 +17,7 @@ const mockHttpRequest: HttpRequest = {
   }
 }
 
-const token = random.uuid()
+const accessToken = random.uuid()
 
 const mockEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -31,7 +31,7 @@ const mockEmailValidator = (): EmailValidator => {
 const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth (email: string, password: string): Promise<string> {
-      return Promise.resolve(token)
+      return Promise.resolve(accessToken)
     }
   }
   return new AuthenticationStub()
@@ -109,5 +109,12 @@ describe('SignIn Controller', () => {
     const httpRequest = mockHttpRequest
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockHttpRequest
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok({ accessToken }))
   })
 })

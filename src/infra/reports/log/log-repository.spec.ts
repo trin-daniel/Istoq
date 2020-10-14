@@ -1,6 +1,10 @@
 import {LogRepository} from './log-repository'
 import fs from 'fs'
 
+const makeSut = (): LogRepository =>{
+  return new LogRepository()
+}
+
 describe('Log Repository', ()=>{
   beforeAll(async () =>{
     await fs.promises.rmdir(`${__dirname}/../../../../reports`, {recursive: true})
@@ -11,7 +15,7 @@ describe('Log Repository', ()=>{
   })
 
   test('Should create report folder if no exist', async ()=>{
-    const sut = new LogRepository()
+    const sut = makeSut()
     const mkdirSpy = jest.spyOn(fs.promises, 'mkdir')
     const error = 'any_error'
     await sut.logError(error)
@@ -19,7 +23,7 @@ describe('Log Repository', ()=>{
   })
 
   test('Should create an error log on success', async ()=>{
-    const sut = new LogRepository()
+    const sut = makeSut()
     const writeSpy = jest.spyOn(fs.promises, 'writeFile')
     const error = 'any_error'
     await sut.logError(error)

@@ -1,12 +1,14 @@
 import { SignInController } from './signin-controller'
 import { badRequest, serverError } from '../../helpers/http/http-helpers'
 import { EmailValidator } from '../../protocols'
+import { Authentication } from '../../../domain/use-cases/authentication'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { internet } from 'faker'
+import { internet, random } from 'faker'
 
 type SutTypes = {
   sut: SignInController
   emailValidatorStub: EmailValidator
+  authenticationStub: Authentication
 }
 
 const mockHttpRequest = {
@@ -15,6 +17,8 @@ const mockHttpRequest = {
     password: internet.password()
   }
 }
+
+const token = random.uuid()
 
 const mockEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -25,12 +29,23 @@ const mockEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const mockAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (email: string, password: string): Promise<string> {
+      return Promise.resolve(token)
+    }
+  }
+  return new AuthenticationStub()
+}
+
 const makeSut = (): SutTypes => {
+  const authenticationStub = mockAuthentication()
   const emailValidatorStub = mockEmailValidator()
-  const sut = new SignInController(emailValidatorStub)
+  const sut = new SignInController(emailValidatorStub, authenticationStub)
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    authenticationStub
   }
 }
 
@@ -71,5 +86,13 @@ describe('SignIn Controller', () => {
     const httpRequest = mockHttpRequest
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const httpRequest = mockHttpRequest
+    await sut.handle(httpRequest)
+    expect(authSpy).toHaveBeenCalledWith(httpRequest.body.email, httpRequest.body.password)
   })
 })

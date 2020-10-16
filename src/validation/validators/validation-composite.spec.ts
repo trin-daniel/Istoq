@@ -5,7 +5,7 @@ import { random } from 'faker'
 
 type SutTypes = {
   sut: ValidationComposite
-  validationStub: Validation
+  validationStubs: Validation[]
 }
 
 const mockValidation = (): Validation => {
@@ -18,19 +18,27 @@ const mockValidation = (): Validation => {
 }
 
 const makeSut = (): SutTypes => {
-  const validationStub = mockValidation()
-  const sut = new ValidationComposite([validationStub])
+  const validationStubs = [mockValidation(), mockValidation()]
+  const sut = new ValidationComposite(validationStubs)
   return {
     sut,
-    validationStub
+    validationStubs
   }
 }
 
 describe('Validation Composite', () => {
   test('Should return an error if any validation fails', () => {
-    const { sut, validationStub } = makeSut()
-    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('field'))
+    const { sut, validationStubs } = makeSut()
+    jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new MissingParamError('field'))
     const error = sut.validate({ field: random.word() })
     expect(error).toEqual(new MissingParamError('field'))
+  })
+
+  test('Should return the first error if more then one validation fails', () => {
+    const { sut, validationStubs } = makeSut()
+    jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new Error())
+    jest.spyOn(validationStubs[1], 'validate').mockReturnValueOnce(new MissingParamError('field'))
+    const error = sut.validate({ field: random.word() })
+    expect(error).toEqual(new Error())
   })
 })

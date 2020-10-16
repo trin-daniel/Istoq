@@ -3,6 +3,7 @@ import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/ht
 import { Authentication, HttpRequest, Validation } from './signin-controller-protocols'
 import { MissingParamError } from '../../errors'
 import { internet, random } from 'faker'
+import { AuthenticationParams } from '../../../domain/use-cases/authentication'
 
 type SutTypes = {
   sut: SignInController
@@ -21,7 +22,7 @@ const accessToken = random.uuid()
 
 const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (email: string, password: string): Promise<string> {
+    async auth (authentication: AuthenticationParams): Promise<string> {
       return Promise.resolve(accessToken)
     }
   }
@@ -54,7 +55,7 @@ describe('SignIn Controller', () => {
     const authSpy = jest.spyOn(authenticationStub, 'auth')
     const httpRequest = mockHttpRequest
     await sut.handle(httpRequest)
-    expect(authSpy).toHaveBeenCalledWith(httpRequest.body.email, httpRequest.body.password)
+    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
   test('Should return 401 if invalid credentials are provided', async () => {

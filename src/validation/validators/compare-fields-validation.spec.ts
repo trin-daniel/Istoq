@@ -12,4 +12,11 @@ describe('CompareFields Validation', () => {
     const error = sut.validate({ field: random.word(), fieldToCompare: random.word() })
     expect(error).toEqual(new InvalidParamError('fieldToCompare'))
   })
+
+  test('Should not return if validation succeeds', () => {
+    const sut = makeSut()
+    const wordFreezed = random.word()
+    const error = sut.validate({ field: wordFreezed, fieldToCompare: wordFreezed })
+    expect(error).toBeFalsy()
+  })
 })

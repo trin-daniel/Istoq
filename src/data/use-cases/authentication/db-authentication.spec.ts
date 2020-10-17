@@ -1,14 +1,20 @@
-import { DbAuthentication } from './db-authentication'
 import { Account } from '../../../domain/models/account'
+import { DbAuthentication } from './db-authentication'
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository'
 import { internet, random } from 'faker'
+import { AuthenticationParams } from '../../../domain/use-cases/authentication'
 
-const mockAuthentication = {
+type SutTypes = {
+  sut: DbAuthentication
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+}
+
+const mockAuthentication: AuthenticationParams = {
   email: internet.email(),
   password: internet.password()
 }
 
-const mockAccount = {
+const mockAccount: Account = {
   id: random.uuid(),
   name: internet.userName(),
   email: internet.email(),
@@ -17,15 +23,27 @@ const mockAccount = {
   updated_at: new Date()
 }
 
+const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    async load (email: string): Promise<Account> {
+      return Promise.resolve(mockAccount)
+    }
+  }
+  return new LoadAccountByEmailRepositoryStub()
+}
+
+const makeSut = (): SutTypes => {
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+  return {
+    sut,
+    loadAccountByEmailRepositoryStub
+  }
+}
+
 describe('DbAuthentication UseCase', () => {
   test('Should call LoadAccountByEmailRepository with correct e-mail', async () => {
-    class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-      async load (email: string): Promise<Account> {
-        return Promise.resolve(mockAccount)
-      }
-    }
-    const loadAccountByEmailRepositoryStub = new LoadAccountByEmailRepositoryStub()
-    const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'load')
     await sut.auth(mockAuthentication)
     expect(loadSpy).toHaveBeenCalledWith(mockAuthentication.email)

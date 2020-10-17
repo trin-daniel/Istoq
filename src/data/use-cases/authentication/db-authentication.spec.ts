@@ -2,11 +2,13 @@ import { DbAuthentication } from './db-authentication'
 import { Account } from '../../../domain/models/account'
 import { LoadAccountByEmailRepository } from '../../protocols/database/load-account-by-email-repository'
 import { AuthenticationParams } from '../../../domain/use-cases/authentication'
+import { HashComparer } from '../../protocols/cryptography/hash-Comparer'
 import { internet, random } from 'faker'
 
 type SutTypes = {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  hashComparerStub: HashComparer
 }
 
 const mockAuthentication: AuthenticationParams = {
@@ -32,12 +34,23 @@ const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   return new LoadAccountByEmailRepositoryStub()
 }
 
+const mockHashComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async compare (value: string, hash: string): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new HashComparerStub()
+}
+
 const makeSut = (): SutTypes => {
+  const hashComparerStub = mockHashComparer()
   const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub)
   return {
     sut,
-    loadAccountByEmailRepositoryStub
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub
   }
 }
 
@@ -61,5 +74,12 @@ describe('DbAuthentication UseCase', () => {
     jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(Promise.resolve(null))
     const accessToken = await sut.auth(mockAuthentication)
     expect(accessToken).toBeNull()
+  })
+
+  test('Should call HashComparer with correct values', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    const compareSpy = jest.spyOn(hashComparerStub, 'compare')
+    await sut.auth(mockAuthentication)
+    expect(compareSpy).toHaveBeenCalledWith(mockAuthentication.password, mockAccount.password)
   })
 })

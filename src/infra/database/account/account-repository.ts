@@ -1,4 +1,4 @@
-import { AddAccountRepository } from '../../../data/protocols/add-account-repository'
+import { AddAccountRepository } from '../../../data/protocols/database/add-account-repository'
 import { Account } from '../../../domain/models/account'
 import { AddAccountParams } from '../../../domain/use-cases/add-account'
 import { SqlHelper } from '../helpers/sql-helper'

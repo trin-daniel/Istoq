@@ -1,6 +1,6 @@
 import { LogControllerDecorator } from './log-controller-decorator'
 import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
-import { LogErrorRepository } from '../../data/protocols/log-error-repository'
+import { LogErrorRepository } from '../../data/protocols/local-storage/log-error-repository'
 import { serverError } from '../../presentation/helpers/http/http-helpers'
 import { internet } from 'faker'
 

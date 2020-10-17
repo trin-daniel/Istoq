@@ -1,6 +1,6 @@
 import { DbAuthentication } from './db-authentication'
 import { Account } from '../../../domain/models/account'
-import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '../../protocols/database/load-account-by-email-repository'
 import { AuthenticationParams } from '../../../domain/use-cases/authentication'
 import { internet, random } from 'faker'
 

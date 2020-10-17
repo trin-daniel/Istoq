@@ -1,10 +1,5 @@
 import { DbAuthentication } from './db-authentication'
-import { Account } from '../../../domain/models/account'
-import { LoadAccountByEmailRepository } from '../../protocols/database/load-account-by-email-repository'
-import { UpdateAccessTokenRepository } from '../../protocols/database/update-access-token-repository'
-import { AuthenticationParams } from '../../../domain/use-cases/authentication'
-import { HashComparer } from '../../protocols/cryptography/hash-Comparer'
-import { Encrypter } from '../../protocols/cryptography/encrypter'
+import { Account, AuthenticationParams, Encrypter, HashComparer, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from './db-authentication-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {

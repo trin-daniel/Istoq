@@ -2,15 +2,18 @@ import { Authentication, AuthenticationParams } from '../../../domain/use-cases/
 import { Encrypter } from '../../protocols/cryptography/encrypter'
 import { HashComparer } from '../../protocols/cryptography/hash-Comparer'
 import { LoadAccountByEmailRepository } from '../../protocols/database/load-account-by-email-repository'
+import { UpdateAccessTokenRepository } from '../../protocols/database/update-access-token-repository'
 
 export class DbAuthentication implements Authentication {
   private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
   private readonly hashComparer: HashComparer
   private readonly encrypter: Encrypter
-  constructor (loadAccountByEmailRepository: LoadAccountByEmailRepository, hashComparer: HashComparer, encrypter: Encrypter) {
+  private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
+  constructor (loadAccountByEmailRepository: LoadAccountByEmailRepository, hashComparer: HashComparer, encrypter: Encrypter, updateAccessTokenRepository: UpdateAccessTokenRepository) {
     this.loadAccountByEmailRepository = loadAccountByEmailRepository
     this.hashComparer = hashComparer
     this.encrypter = encrypter
+    this.updateAccessTokenRepository = updateAccessTokenRepository
   }
 
   async auth (authentication: AuthenticationParams): Promise<string> {
@@ -20,6 +23,7 @@ export class DbAuthentication implements Authentication {
       const isValid = await this.hashComparer.compare(password, account.password)
       if (isValid) {
         const accessToken = await this.encrypter.encrypt(account.id)
+        await this.updateAccessTokenRepository.update(account.id, accessToken)
         return accessToken
       }
     }

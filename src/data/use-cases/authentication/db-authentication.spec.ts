@@ -3,12 +3,14 @@ import { Account } from '../../../domain/models/account'
 import { LoadAccountByEmailRepository } from '../../protocols/database/load-account-by-email-repository'
 import { AuthenticationParams } from '../../../domain/use-cases/authentication'
 import { HashComparer } from '../../protocols/cryptography/hash-Comparer'
+import { Encrypter } from '../../protocols/cryptography/encrypter'
 import { internet, random } from 'faker'
 
 type SutTypes = {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
+  encrypterStub: Encrypter
 }
 
 const mockAuthentication: AuthenticationParams = {
@@ -24,6 +26,8 @@ const mockAccount: Account = {
   created_at: new Date(),
   updated_at: new Date()
 }
+
+const mockAccessToken = random.uuid()
 
 const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
@@ -43,14 +47,25 @@ const mockHashComparer = (): HashComparer => {
   return new HashComparerStub()
 }
 
+const mockEncrypter = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
+    async encrypt (id: string): Promise<string> {
+      return Promise.resolve(mockAccessToken)
+    }
+  }
+  return new EncrypterStub()
+}
+
 const makeSut = (): SutTypes => {
+  const encrypterStub = mockEncrypter()
   const hashComparerStub = mockHashComparer()
   const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub)
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub)
   return {
     sut,
     loadAccountByEmailRepositoryStub,
-    hashComparerStub
+    hashComparerStub,
+    encrypterStub
   }
 }
 
@@ -95,5 +110,12 @@ describe('DbAuthentication UseCase', () => {
     jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
     const accessToken = await sut.auth(mockAuthentication)
     expect(accessToken).toBeNull()
+  })
+
+  test('Should call Encrypter with correct id', async () => {
+    const { sut, encrypterStub } = makeSut()
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    await sut.auth(mockAuthentication)
+    expect(encryptSpy).toHaveBeenCalledWith(mockAccount.id)
   })
 })

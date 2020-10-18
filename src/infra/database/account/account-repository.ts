@@ -22,5 +22,7 @@ export class AccountRepository implements AddAccountRepository, LoadAccountByEma
   async loadByEmail (email: string): Promise<Account> {
     const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE email = (?)', [email])
     return account[0][0]
+      ? account[0][0]
+      : null
   }
 }

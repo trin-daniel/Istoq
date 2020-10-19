@@ -1,6 +1,6 @@
 import { AccountRepository } from './account-repository'
 import { SqlHelper } from '../helpers/sql-helper'
-import { internet } from 'faker'
+import { internet, random } from 'faker'
 
 const params = {
   name: internet.userName(),
@@ -22,6 +22,10 @@ describe('Account Repository', () => {
   })
 
   beforeEach(async () => {
+    await SqlHelper.runQuery('truncate table accounts')
+  })
+
+  afterEach(async () => {
     await SqlHelper.runQuery('truncate table accounts')
   })
 
@@ -57,5 +61,22 @@ describe('Account Repository', () => {
     const sut = makeSut()
     const account = await sut.loadByEmail(params.email)
     expect(account).toBeFalsy()
+  })
+
+  test('Should update the account accessToken on updateAccessToken success', async () => {
+    const { name, email, password } = params
+    const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
+    const created_at = new Date()
+    const updated_at = new Date()
+    await SqlHelper.runQuery(
+      'INSERT INTO accounts (id, name, email, password, created_at, updated_at) VALUES(?,?,?,?,?,?)',
+      [id, name, email, password, created_at, updated_at]
+    )
+    const sut = makeSut()
+    const accessToken = random.uuid()
+    await sut.updateAccessToken(id, accessToken)
+    const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE id = (?)', [id])
+    expect(account[0][0]).toBeTruthy()
+    expect(account[0][0].token).toBe(accessToken)
   })
 })

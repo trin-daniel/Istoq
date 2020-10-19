@@ -21,7 +21,7 @@ export const SqlHelper = {
   },
 
   async runQuery (sql: string, params?: Array<any>): Promise<any> {
-    if (!this.client?.getConnection()) {
+    if (!this.client) {
       await this.connect()
     }
     const sqlResult = await this.client.query(sql, params)

@@ -43,4 +43,16 @@ describe('SignIn Routes', () => {
       .send(httpRequest)
       .expect(200)
   })
+
+  test('Should return 401 on signin', async () => {
+    const url = '/api/signin'
+    const httpRequest = {
+      email: internet.email(),
+      password: internet.password()
+    }
+    await request(app)
+      .post(url)
+      .send(httpRequest)
+      .expect(401)
+  })
 })

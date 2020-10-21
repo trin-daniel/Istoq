@@ -1,11 +1,12 @@
 import { DbAddAccount } from './db-add-account'
-import { Account, AddAccountParams, AddAccountRepository, Hasher } from './db-add-account-protocols'
+import { Account, AddAccountParams, AddAccountRepository, LoadAccountByEmailRepository, Hasher } from './db-add-account-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {
   sut: DbAddAccount
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
 }
 
 const hashedPassword = internet.password()
@@ -42,14 +43,25 @@ const mockAddAccountRepository = (): AddAccountRepository => {
   return new AddAccountRepositoryStub()
 }
 
+const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    async loadByEmail (email: string): Promise<Account> {
+      return Promise.resolve(mockAccount)
+    }
+  }
+  return new LoadAccountByEmailRepositoryStub()
+}
+
 const makeSut = (): SutTypes => {
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
   const addAccountRepositoryStub = mockAddAccountRepository()
   const hasherStub = mockHasher()
-  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
+  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub)
   return {
     sut,
     hasherStub,
-    addAccountRepositoryStub
+    addAccountRepositoryStub,
+    loadAccountByEmailRepositoryStub
   }
 }
 
@@ -86,5 +98,13 @@ describe('DbAddAccount Usecase', () => {
     const { sut } = makeSut()
     const account = await sut.add(params)
     expect(account).toEqual(mockAccount)
+  })
+
+  test('Should call LoadAccountByEmailRepository with correct e-mail', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const loadByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    const authentication = params
+    await sut.add(authentication)
+    expect(loadByEmailSpy).toHaveBeenCalledWith(authentication.email)
   })
 })

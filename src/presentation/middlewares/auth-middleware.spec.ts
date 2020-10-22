@@ -6,6 +6,11 @@ import { Account } from '../../domain/models/account'
 import { LoadAccountByToken } from '../../domain/use-cases/load-account-by-token'
 import { internet, random } from 'faker'
 
+type SutTypes = {
+  sut: AuthMiddleware
+  loadAccountByTokenStub: LoadAccountByToken
+}
+
 const mockHttpRequest: HttpRequest = {
   headers: {
     'x-access-token': random.uuid()
@@ -21,27 +26,33 @@ const mockAccount = {
   updated_at: new Date()
 }
 
+const mockLoadAccountByToken = (): LoadAccountByToken => {
+  class LoadAccountByTokenStub implements LoadAccountByToken {
+    async loadByToken (accessToken: string): Promise<Account> {
+      return Promise.resolve(mockAccount)
+    }
+  }
+  return new LoadAccountByTokenStub()
+}
+
+const makeSut = (): SutTypes => {
+  const loadAccountByTokenStub = mockLoadAccountByToken()
+  const sut = new AuthMiddleware(loadAccountByTokenStub)
+  return {
+    sut,
+    loadAccountByTokenStub
+  }
+}
+
 describe('Auth Middleware', () => {
   test('Should return 403 if no x-access-token exists in headers', async () => {
-    class LoadAccountByTokenStub implements LoadAccountByToken {
-      async loadByToken (accessToken: string): Promise<Account> {
-        return Promise.resolve(mockAccount)
-      }
-    }
-    const loadAccountByTokenStub = new LoadAccountByTokenStub()
-    const sut = new AuthMiddleware(loadAccountByTokenStub)
+    const { sut } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 
   test('Should call LoadAccountByToken with correct accessToken', async () => {
-    class LoadAccountByTokenStub implements LoadAccountByToken {
-      async loadByToken (accessToken: string): Promise<Account> {
-        return Promise.resolve(mockAccount)
-      }
-    }
-    const loadAccountByTokenStub = new LoadAccountByTokenStub()
-    const sut = new AuthMiddleware(loadAccountByTokenStub)
+    const { sut, loadAccountByTokenStub } = makeSut()
     const loadByTokenSpy = jest.spyOn(loadAccountByTokenStub, 'loadByToken')
     const httpRequest = mockHttpRequest
     await sut.handle(httpRequest)

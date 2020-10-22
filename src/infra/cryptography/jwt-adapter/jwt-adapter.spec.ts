@@ -8,6 +8,10 @@ const mockAccessToken = random.uuid()
 jest.mock('jsonwebtoken', () => ({
   async sign (): Promise<string> {
     return Promise.resolve(mockAccessToken)
+  },
+
+  async verify (): Promise<string> {
+    return Promise.resolve(id)
   }
 }))
 
@@ -34,5 +38,12 @@ describe('Jwt Adapter', () => {
     jest.spyOn(jwt, 'sign').mockImplementationOnce(() => { throw new Error() })
     const promise = sut.encrypt(id)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call verify with correct values', async () => {
+    const sut = makeSut()
+    const verifySpy = jest.spyOn(jwt, 'verify')
+    await sut.decrypt(mockAccessToken)
+    expect(verifySpy).toHaveBeenCalledWith(mockAccessToken, 'secret')
   })
 })

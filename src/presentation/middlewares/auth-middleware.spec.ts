@@ -1,9 +1,7 @@
 import { AuthMiddleware } from './auth-middleware'
+import { Account, HttpRequest, LoadAccountByToken } from './auth-middleware-protocols'
 import { forbidden, ok, serverError } from '../helpers/http/http-helpers'
 import { AccessDeniedError } from '../errors'
-import { HttpRequest } from '../protocols'
-import { Account } from '../../domain/models/account'
-import { LoadAccountByToken } from '../../domain/use-cases/load-account-by-token'
 import { internet, random } from 'faker'
 
 type SutTypes = {

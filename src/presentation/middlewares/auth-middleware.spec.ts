@@ -28,7 +28,7 @@ const mockAccount = {
 
 const mockLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
-    async loadByToken (accessToken: string): Promise<Account> {
+    async load (accessToken: string): Promise<Account> {
       return Promise.resolve(mockAccount)
     }
   }
@@ -53,7 +53,7 @@ describe('Auth Middleware', () => {
 
   test('Should call LoadAccountByToken with correct accessToken', async () => {
     const { sut, loadAccountByTokenStub } = makeSut()
-    const loadByTokenSpy = jest.spyOn(loadAccountByTokenStub, 'loadByToken')
+    const loadByTokenSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     const httpRequest = mockHttpRequest
     await sut.handle(httpRequest)
     expect(loadByTokenSpy).toHaveBeenCalledWith(httpRequest.headers['x-access-token'])

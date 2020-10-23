@@ -1,11 +1,16 @@
 import { AddAccountRepository } from '../../../data/protocols/database/account/add-account-repository'
 import { LoadAccountByEmailRepository } from '../../../data/protocols/database/account/load-account-by-email-repository'
+import { LoadAccountByTokenRepository } from '../../../data/protocols/database/account/load-account-by-token-repository'
 import { UpdateAccessTokenRepository } from '../../../data/protocols/database/account/update-access-token-repository'
 import { Account } from '../../../domain/models/account'
 import { AddAccountParams } from '../../../domain/use-cases/account/add-account'
 import { SqlHelper } from '../helpers/sql-helper'
 
-export class AccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository {
+export class AccountRepository implements
+AddAccountRepository,
+LoadAccountByEmailRepository,
+LoadAccountByTokenRepository,
+UpdateAccessTokenRepository {
   async add (params: AddAccountParams): Promise<Account> {
     const { name, email, password } = params
     const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
@@ -30,5 +35,12 @@ export class AccountRepository implements AddAccountRepository, LoadAccountByEma
   async updateAccessToken (id: string, token: string): Promise<void> {
     const updated_at = new Date()
     await SqlHelper.runQuery('UPDATE accounts SET token = (?), updated_at= (?) WHERE id= (?)', [token, updated_at, id])
+  }
+
+  async loadByToken (token: string): Promise<Account> {
+    const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE token = (?)', [token])
+    return account[0][0]
+      ? account[0][0]
+      : null
   }
 }

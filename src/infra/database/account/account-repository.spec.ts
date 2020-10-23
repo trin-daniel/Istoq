@@ -79,4 +79,23 @@ describe('Account Repository', () => {
     expect(account[0][0]).toBeTruthy()
     expect(account[0][0].token).toBe(accessToken)
   })
+
+  test('Should return an account on loadByToken success', async () => {
+    const { name, email, password } = params
+    const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
+    const accessToken = random.uuid()
+    const created_at = new Date()
+    const updated_at = new Date()
+    await SqlHelper.runQuery(
+      'INSERT INTO accounts (id, token, name, email, password, created_at, updated_at) VALUES(?,?,?,?,?,?,?)',
+      [id, accessToken, name, email, password, created_at, updated_at]
+    )
+    const sut = makeSut()
+    const account = await sut.loadByToken(accessToken)
+    expect(account).toBeTruthy()
+    expect(account.id).toBeTruthy()
+    expect(account.name).toBe(params.name)
+    expect(account.email).toBe(params.email)
+    expect(account.password).toBe(params.password)
+  })
 })

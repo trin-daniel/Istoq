@@ -3,7 +3,7 @@ import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/ht
 import { Authentication, HttpRequest, Validation } from './signin-controller-protocols'
 import { MissingParamError } from '../../errors'
 import { internet, random } from 'faker'
-import { AuthenticationParams } from '../../../domain/use-cases/authentication'
+import { AuthenticationParams } from '../../../domain/use-cases/account/authentication'
 
 type SutTypes = {
   sut: SignInController

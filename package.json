@@ -4,13 +4,14 @@
   "description": "sales management and control application",
   "scripts": {
     "start": "sucrase-node src/main/server.ts",
+    "build":"rimraf dist && tsc",
     "test": "jest --passWithNoTests --runInBand --silent --noStackTrace",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm run test -- --watch -c jest-unit-config.js",
     "test:integration": "npm run test -- --watch -c jest-integration-config.js",
     "test:staged": "npm run test -- --findRelatedTests",
     "test:ci": "npm run test -- --coverage",
-    "test:coveralls":"npm run test:ci && coveralls < coverage/lcov.info"
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
   "keywords": [],
   "author": "Carlos Daniel",
@@ -39,6 +40,7 @@
     "husky": "^4.3.0",
     "jest": "^26.5.2",
     "lint-staged": "^10.4.0",
+    "rimraf": "^3.0.2",
     "sucrase": "^3.15.0",
     "supertest": "^5.0.0",
     "ts-jest": "^26.4.1",

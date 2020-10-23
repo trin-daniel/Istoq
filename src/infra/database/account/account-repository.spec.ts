@@ -98,4 +98,11 @@ describe('Account Repository', () => {
     expect(account.email).toBe(params.email)
     expect(account.password).toBe(params.password)
   })
+
+  test('Should return null if loadByToken fails', async () => {
+    const sut = makeSut()
+    const accessToken = random.uuid()
+    const account = await sut.loadByToken(accessToken)
+    expect(account).toBeFalsy()
+  })
 })

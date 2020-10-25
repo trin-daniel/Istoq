@@ -1,4 +1,4 @@
-import { SqlHelper } from '../infra/database/helpers/sql-helper'
+import { SqlHelper } from '../infra/database/helpers/connection-helper'
 import { app } from './config/app'
 import { config as dotenv } from 'dotenv'
 dotenv()

@@ -4,7 +4,7 @@ import { LoadAccountByTokenRepository } from '../../../data/protocols/database/a
 import { UpdateAccessTokenRepository } from '../../../data/protocols/database/account/update-access-token-repository'
 import { Account } from '../../../domain/models/account'
 import { AddAccountParams } from '../../../domain/use-cases/account/add-account'
-import { SqlHelper } from '../helpers/sql-helper'
+import { SqlHelper } from '../helpers/connection-helper'
 
 export class AccountRepository implements
 AddAccountRepository,

@@ -1,4 +1,4 @@
-import { EmailValidatorAdapter } from './email-validator-adapter'
+import { EmailValidatorAdapter } from '@infra/validators/email-validator-adapter'
 import { internet } from 'faker'
 import validator from 'validator'
 

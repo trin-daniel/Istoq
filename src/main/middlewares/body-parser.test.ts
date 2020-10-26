@@ -1,6 +1,6 @@
-import request from 'supertest'
-import { app } from '../config/app'
+import { app } from '@main/config/app'
 import { internet } from 'faker'
+import request from 'supertest'
 
 describe('Body Parser Middleware', () => {
   test('Should parser body as json', async () => {

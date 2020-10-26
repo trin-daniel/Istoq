@@ -1,7 +1,5 @@
-import { Decrypter } from '../../protocols/cryptography/decrypter'
-import { DbLoadAccountByToken } from './db-load-account-by-token'
-import { LoadAccountByTokenRepository } from '../../protocols/database/account/load-account-by-token-repository'
-import { Account } from '../../../domain/models/account'
+import { DbLoadAccountByToken } from '@data/use-cases/load-account-by-token/db-load-account-by-token'
+import { Account, Decrypter, LoadAccountByTokenRepository } from '@data/use-cases/load-account-by-token/db-load-account-by-token-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {

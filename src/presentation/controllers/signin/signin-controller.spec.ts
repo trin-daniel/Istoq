@@ -1,9 +1,8 @@
-import { SignInController } from './signin-controller'
-import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/http-helpers'
-import { Authentication, HttpRequest, Validation } from './signin-controller-protocols'
-import { MissingParamError } from '../../errors'
+import { SignInController } from '@presentation/controllers/signin/signin-controller'
+import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http/http-helpers'
+import { Authentication, AuthenticationParams, HttpRequest, Validation } from '@presentation/controllers/signin/signin-controller-protocols'
+import { MissingParamError } from '@presentation/errors'
 import { internet, random } from 'faker'
-import { AuthenticationParams } from '../../../domain/use-cases/account/authentication'
 
 type SutTypes = {
   sut: SignInController

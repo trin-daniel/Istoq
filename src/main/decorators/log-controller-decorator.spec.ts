@@ -1,7 +1,7 @@
-import { LogControllerDecorator } from './log-controller-decorator'
-import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
-import { LogErrorRepository } from '../../data/protocols/local-storage/log-error-repository'
-import { serverError } from '../../presentation/helpers/http/http-helpers'
+import { Controller, HttpRequest, HttpResponse } from '@presentation/protocols'
+import { serverError } from '@presentation/helpers/http/http-helpers'
+import { LogErrorRepository } from '@data/protocols/local-storage/log-error-repository'
+import { LogControllerDecorator } from '@main/decorators/log-controller-decorator'
 import { internet } from 'faker'
 
 type SutTypes = {

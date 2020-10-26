@@ -1,5 +1,5 @@
-import { AccountRepository } from './account-repository'
-import { SqlHelper } from '../helpers/connection-helper'
+import { AccountRepository } from '@infra/database/account/account-repository'
+import { SqlHelper } from '@infra/database/helpers/connection-helper'
 import { internet, random } from 'faker'
 
 const params = {

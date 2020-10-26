@@ -1,7 +1,7 @@
-import { SignUpController } from './signup-controller'
-import { Account, AddAccount, AddAccountParams, Authentication, AuthenticationParams, HttpRequest, Validation } from './signup-controller-protocols'
-import { badRequest, forbidden, ok, serverError } from '../../helpers/http/http-helpers'
-import { EmailInUseError, MissingParamError } from '../../errors'
+import { SignUpController } from '@presentation/controllers/signup/signup-controller'
+import { Account, AddAccount, AddAccountParams, Authentication, AuthenticationParams, HttpRequest, Validation } from '@presentation/controllers/signup/signup-controller-protocols'
+import { badRequest, forbidden, ok, serverError } from '@presentation/helpers/http/http-helpers'
+import { EmailInUseError, MissingParamError } from '@presentation/errors'
 import { internet, random } from 'faker'
 
 type SutTypes = {

@@ -1,4 +1,4 @@
-import {LogRepository} from './log-repository'
+import {LogRepository} from '@infra/reports/log/log-repository'
 import fs from 'fs'
 
 const makeSut = (): LogRepository =>{

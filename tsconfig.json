@@ -5,14 +5,23 @@
     "allowJs": true,                       
     "sourceMap": true,                                     
     "outDir": "dist",                        
-    "rootDir": "src",                       
-    "strict": true,                           
+    "rootDir": "src",
+    "baseUrl": "src",                
+    "strict": true,                         
     "noImplicitAny": false,                 
     "strictNullChecks": false,             
     "esModuleInterop": true,                  
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true  
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@infra/*": ["infra/*"],
+      "@main/*": ["main/*"],
+      "@data/*": ["data/*"],
+      "@domain/*": ["domain/*"],
+      "@validation/*": ["validation/*"],
+      "@presentation/*": ["presentation/*"]
+    }
   },
   "include":["src"],
-  "exclude": ["**/*.spec.ts"]
+  "exclude": []
 }

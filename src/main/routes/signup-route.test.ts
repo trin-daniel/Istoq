@@ -1,5 +1,5 @@
-import { app } from '../config/app'
-import { SqlHelper } from '../../infra/database/helpers/connection-helper'
+import { SqlHelper } from '@infra/database/helpers/connection-helper'
+import { app } from '@main/config/app'
 import { internet } from 'faker'
 import request from 'supertest'
 

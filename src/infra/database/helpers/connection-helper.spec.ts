@@ -1,4 +1,4 @@
-import { SqlHelper as sut } from './connection-helper'
+import { SqlHelper as sut } from '@infra/database/helpers/connection-helper'
 
 describe('Connection Helper', () => {
   beforeAll(async () => {

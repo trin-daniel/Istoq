@@ -1,4 +1,4 @@
-import { BcryptAdapter } from './bcrypt-adapter'
+import { BcryptAdapter } from '@infra/cryptography/bcrypt-adapter/bcrypt-adapter'
 import { internet, random } from 'faker'
 import bcrypt from 'bcrypt'
 

@@ -1,5 +1,5 @@
-// For a detailed explanation regarding each configuration property, visit:
-// https://jestjs.io/docs/en/configuration.html
+const { compilerOptions } = require('./tsconfig.json')
+const resolve = require('ts-jest/utils')
 
 module.exports = {
   collectCoverageFrom: [
@@ -11,5 +11,6 @@ module.exports = {
   roots: ['<rootDir>/src'],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
-  transform: { '.+\\.ts$': 'ts-jest' }
+  transform: { '.+\\.ts$': 'ts-jest' },
+  moduleNameMapper: resolve.pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src' })
 }

@@ -1,4 +1,4 @@
-import { LogErrorRepository } from '../../../data/protocols/local-storage/log-error-repository'
+import { LogErrorRepository } from '@data/protocols/local-storage/log-error-repository'
 import { promises, existsSync } from 'fs'
 
 export class LogRepository implements LogErrorRepository {

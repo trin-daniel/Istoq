@@ -1,5 +1,5 @@
-import { DbAuthentication } from './db-authentication'
-import { Account, AuthenticationParams, Encrypter, HashComparer, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from './db-authentication-protocols'
+import { DbAuthentication } from '@data/use-cases/authentication/db-authentication'
+import { Account, AuthenticationParams, Encrypter, HashComparer, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from '@data/use-cases/authentication/db-authentication-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {

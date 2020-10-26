@@ -1,7 +1,7 @@
-import { AuthMiddleware } from './auth-middleware'
-import { Account, HttpRequest, LoadAccountByToken } from './auth-middleware-protocols'
-import { forbidden, ok, serverError } from '../helpers/http/http-helpers'
-import { AccessDeniedError } from '../errors'
+import { AuthMiddleware } from '@presentation/middlewares/auth-middleware'
+import { Account, HttpRequest, LoadAccountByToken } from '@presentation/middlewares/auth-middleware-protocols'
+import { forbidden, ok, serverError } from '@presentation/helpers/http/http-helpers'
+import { AccessDeniedError } from '@presentation/errors'
 import { internet, random } from 'faker'
 
 type SutTypes = {

@@ -1,10 +1,10 @@
-import { AddAccountRepository } from '../../../data/protocols/database/account/add-account-repository'
-import { LoadAccountByEmailRepository } from '../../../data/protocols/database/account/load-account-by-email-repository'
-import { LoadAccountByTokenRepository } from '../../../data/protocols/database/account/load-account-by-token-repository'
-import { UpdateAccessTokenRepository } from '../../../data/protocols/database/account/update-access-token-repository'
-import { Account } from '../../../domain/models/account'
-import { AddAccountParams } from '../../../domain/use-cases/account/add-account'
-import { SqlHelper } from '../helpers/connection-helper'
+import { Account } from '@domain/models/account'
+import { AddAccountParams } from '@domain/use-cases/account/add-account'
+import { LoadAccountByEmailRepository } from '@data/protocols/database/account/load-account-by-email-repository'
+import { LoadAccountByTokenRepository } from '@data/protocols/database/account/load-account-by-token-repository'
+import { UpdateAccessTokenRepository } from '@data/protocols/database/account/update-access-token-repository'
+import { AddAccountRepository } from '@data/protocols/database/account/add-account-repository'
+import { SqlHelper } from '@infra/database/helpers/connection-helper'
 
 export class AccountRepository implements
 AddAccountRepository,

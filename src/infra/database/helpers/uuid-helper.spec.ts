@@ -28,4 +28,10 @@ describe('UUID Helper', () => {
     sut.generate()
     expect(v4Spy).toHaveBeenCalled()
   })
+
+  test('Should throw if uuid method v4 throws', async () => {
+    const { sut } = makeSut()
+    jest.spyOn(uuid, 'v4').mockImplementation(() => { throw new Error() })
+    expect(sut.generate).toThrow()
+  })
 })

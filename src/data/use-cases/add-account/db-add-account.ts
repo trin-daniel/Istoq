@@ -1,11 +1,7 @@
 import { Account, AddAccountParams, AddAccountRepository, AddAccount, LoadAccountByEmailRepository, Hasher } from '@data/use-cases/add-account/db-add-account-protocols'
 
 export class DbAddAccount implements AddAccount {
-  constructor (
-    private readonly hasher: Hasher,
-    private readonly addAccountRepository: AddAccountRepository,
-    private readonly loadAccountByEmailrepository: LoadAccountByEmailRepository
-  ) {}
+  constructor (private readonly hasher: Hasher, private readonly addAccountRepository: AddAccountRepository, private readonly loadAccountByEmailrepository: LoadAccountByEmailRepository) {}
 
   async add (params: AddAccountParams): Promise<Account> {
     const isAccount = await this.loadAccountByEmailrepository.loadByEmail(params.email)

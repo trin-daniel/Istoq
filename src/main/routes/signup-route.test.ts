@@ -4,34 +4,21 @@ import { internet } from 'faker'
 import request from 'supertest'
 
 describe('SignUp Routes', () => {
-  beforeAll(async () => {
-    await SqlHelper.connect()
-  })
-
-  afterAll(async () => {
-    await SqlHelper.disconnect()
-  })
-
-  beforeEach(async () => {
-    await SqlHelper.runQuery('truncate table accounts')
-  })
-
-  afterEach(async () => {
-    await SqlHelper.runQuery('truncate table accounts')
-  })
+  beforeAll(async () => await SqlHelper.connect())
+  afterAll(async () => await SqlHelper.disconnect())
+  beforeEach(async () => await SqlHelper.runQuery('truncate table accounts'))
 
   test('Should return an account on success', async () => {
-    const url = '/api/signup'
-    const passwordFreeze = internet.password()
-    const httpRequest = {
+    const password = internet.password()
+    const body = {
       name: internet.userName(),
       email: internet.email(),
-      password: passwordFreeze,
-      confirmation: passwordFreeze
+      password,
+      confirmation: password
     }
     await request(app)
-      .post(url)
-      .send(httpRequest)
+      .post('/api/signup')
+      .send(body)
       .expect(200)
   })
 })

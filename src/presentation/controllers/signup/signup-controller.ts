@@ -9,19 +9,16 @@ export class SignUpController implements Controller {
     private readonly authentication: Authentication
   ) {}
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (request: HttpRequest): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
-      if (error) {
-        return badRequest(error)
-      }
-      const { name, email, password } = httpRequest.body
+      const error = this.validation.validate(request.body)
+      const { name, email, password } = request.body
+      if (error) return badRequest(error)
+
       const account = await this.addAccount.add({ name, email, password })
-      if (!account) {
-        return forbidden(new EmailInUseError())
-      }
-      const accessToken = await this.authentication.auth({ email, password })
-      return ok({ accessToken })
+      return !account
+        ? forbidden(new EmailInUseError())
+        : ok({ token: await this.authentication.auth({ email, password }) })
     } catch (error) {
       return serverError(error)
     }

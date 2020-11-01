@@ -4,16 +4,12 @@ import { LoadAccountByEmailRepository } from '@data/protocols/database/account/l
 import { LoadAccountByTokenRepository } from '@data/protocols/database/account/load-account-by-token-repository'
 import { UpdateAccessTokenRepository } from '@data/protocols/database/account/update-access-token-repository'
 import { AddAccountRepository } from '@data/protocols/database/account/add-account-repository'
-import { SqlHelper } from '@infra/database/helpers/connection-helper'
+import { SqlHelper, uuid } from '@infra/database/helpers/'
 
-export class AccountRepository implements
-AddAccountRepository,
-LoadAccountByEmailRepository,
-LoadAccountByTokenRepository,
-UpdateAccessTokenRepository {
+export class AccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateAccessTokenRepository {
   async add (params: AddAccountParams): Promise<Account> {
     const { name, email, password } = params
-    const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
+    const id = uuid.generate()
     const created_at = new Date()
     const updated_at = new Date()
     await SqlHelper.runQuery(

@@ -1,5 +1,5 @@
 import { AccountRepository } from '@infra/database/account/account-repository'
-import { SqlHelper } from '@infra/database/helpers/connection-helper'
+import { SqlHelper } from '@infra/database/helpers'
 import { internet, random } from 'faker'
 
 const params = {
@@ -13,21 +13,9 @@ const makeSut = (): AccountRepository => {
 }
 
 describe('Account Repository', () => {
-  beforeAll(async () => {
-    await SqlHelper.connect()
-  })
-
-  afterAll(async () => {
-    await SqlHelper.disconnect()
-  })
-
-  beforeEach(async () => {
-    await SqlHelper.runQuery('truncate table accounts')
-  })
-
-  afterEach(async () => {
-    await SqlHelper.runQuery('truncate table accounts')
-  })
+  beforeAll(async () => await SqlHelper.connect())
+  afterAll(async () => await SqlHelper.disconnect())
+  beforeEach(async () => await SqlHelper.runQuery('TRUNCATE TABLE accounts'))
 
   test('Should return an account on add with success', async () => {
     const sut = makeSut()
@@ -41,7 +29,7 @@ describe('Account Repository', () => {
 
   test('Should return an account on loadByEmail success', async () => {
     const { name, email, password } = params
-    const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
+    const id = random.uuid()
     const created_at = new Date()
     const updated_at = new Date()
     await SqlHelper.runQuery(
@@ -65,7 +53,7 @@ describe('Account Repository', () => {
 
   test('Should update the account accessToken on updateAccessToken success', async () => {
     const { name, email, password } = params
-    const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
+    const id = random.uuid()
     const created_at = new Date()
     const updated_at = new Date()
     await SqlHelper.runQuery(
@@ -73,25 +61,25 @@ describe('Account Repository', () => {
       [id, name, email, password, created_at, updated_at]
     )
     const sut = makeSut()
-    const accessToken = random.uuid()
-    await sut.updateAccessToken(id, accessToken)
+    const token = random.uuid()
+    await sut.updateAccessToken(id, token)
     const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE id = (?)', [id])
     expect(account[0][0]).toBeTruthy()
-    expect(account[0][0].token).toBe(accessToken)
+    expect(account[0][0].token).toBe(token)
   })
 
   test('Should return an account on loadByToken success', async () => {
     const { name, email, password } = params
-    const id = `${Date.now()}${Math.random().toString(36).substr(2, 6)}`
-    const accessToken = random.uuid()
+    const id = random.uuid()
+    const token = random.uuid()
     const created_at = new Date()
     const updated_at = new Date()
     await SqlHelper.runQuery(
       'INSERT INTO accounts (id, token, name, email, password, created_at, updated_at) VALUES(?,?,?,?,?,?,?)',
-      [id, accessToken, name, email, password, created_at, updated_at]
+      [id, token, name, email, password, created_at, updated_at]
     )
     const sut = makeSut()
-    const account = await sut.loadByToken(accessToken)
+    const account = await sut.loadByToken(token)
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe(params.name)
@@ -101,8 +89,8 @@ describe('Account Repository', () => {
 
   test('Should return null if loadByToken fails', async () => {
     const sut = makeSut()
-    const accessToken = random.uuid()
-    const account = await sut.loadByToken(accessToken)
+    const token = random.uuid()
+    const account = await sut.loadByToken(token)
     expect(account).toBeFalsy()
   })
 })

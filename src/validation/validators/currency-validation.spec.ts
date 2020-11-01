@@ -1,5 +1,6 @@
 import { InvalidParamError } from '@presentation/errors'
 import { CurrencyValidation } from '@validation/validators/currency-validation'
+import { random } from 'faker'
 
 type SutTypes = {
   sut: CurrencyValidation
@@ -18,5 +19,12 @@ describe('Currency Validation', () => {
     const input = { price: '' }
     const error = sut.validate(input)
     expect(error).toEqual(new InvalidParamError('price'))
+  })
+
+  test('Should return null if validation succeeds', () => {
+    const { sut } = makeSut()
+    const input = { price: random.float().toString() }
+    const error = sut.validate(input)
+    expect(error).toBeNull()
   })
 })

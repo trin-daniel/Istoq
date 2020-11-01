@@ -20,4 +20,11 @@ describe('Quantity Validation', () => {
     const error = sut.validate(input)
     expect(error).toEqual(new InvalidParamError('quantity'))
   })
+
+  test('Should return null if validation succeeds', async () => {
+    const { sut } = makeSut()
+    const input = { quantity: random.number().toString() }
+    const error = sut.validate(input)
+    expect(error).toBeNull()
+  })
 })

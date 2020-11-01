@@ -20,4 +20,11 @@ describe('Discount Validation', () => {
     const error = sut.validate(input)
     expect(error).toEqual(new InvalidParamError('discount'))
   })
+
+  test('Should return null if validation succeeds', () => {
+    const { sut } = makeSut()
+    const input = { discount: random.number(100).toString() }
+    const error = sut.validate(input)
+    expect(error).toBeNull()
+  })
 })

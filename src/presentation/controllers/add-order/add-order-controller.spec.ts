@@ -1,6 +1,6 @@
 import { AddOrderController } from '@presentation/controllers/add-order/add-order-controller'
 import { AddOrder, HttpRequest, orderParams, Order, Validation } from '@presentation/controllers/add-order/add-order-controller-protocols'
-import { badRequest } from '@presentation/helpers/http/http-helpers'
+import { badRequest, ok } from '@presentation/helpers/http/http-helpers'
 import { internet, random } from 'faker'
 
 type SutTypes = {
@@ -79,5 +79,12 @@ describe('Add Order Controller', () => {
     const request = mockRequest
     await sut.handle(request)
     expect(addSpy).toHaveBeenCalledWith({ ...request.body, account_id: request.account_id })
+  })
+
+  test('Should return 200 on add order with success', async () => {
+    const { sut } = makeSut()
+    const request = mockRequest
+    const response = await sut.handle(request)
+    expect(response).toEqual(ok(mockOrder))
   })
 })

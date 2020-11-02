@@ -44,4 +44,11 @@ describe('DbAddOrder Usecase', () => {
     await sut.add(data)
     expect(addSpy).toHaveBeenCalledWith(data)
   })
+
+  test('Should return new order on success', async () => {
+    const { sut } = makeSut()
+    const data = body
+    const order = await sut.add(data)
+    expect(order).toEqual(mockOrder)
+  })
 })

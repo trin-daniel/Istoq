@@ -1,5 +1,5 @@
-import { DbAddOrder } from '@data/use-cases/add-order/db-add-order'
-import { AddOrderRepository, orderParams, Order } from '@data/use-cases/add-order/db-add-order-protocols'
+import { DbAddOrder } from '@data/use-cases/order/add-order/db-add-order'
+import { AddOrderRepository, orderParams, Order } from '@data/use-cases/order/add-order/db-add-order-protocols'
 import { internet, random } from 'faker'
 
 type SutTypes = {

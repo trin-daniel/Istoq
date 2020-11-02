@@ -1,4 +1,4 @@
-import { AddOrder, AddOrderRepository, orderParams, Order } from '@data/use-cases/add-order/db-add-order-protocols'
+import { AddOrder, AddOrderRepository, orderParams, Order } from '@data/use-cases/order/add-order/db-add-order-protocols'
 
 export class DbAddOrder implements AddOrder {
   constructor (private readonly addOrderRepository: AddOrderRepository) {}

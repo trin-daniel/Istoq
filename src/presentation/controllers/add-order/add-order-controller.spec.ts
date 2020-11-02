@@ -1,5 +1,6 @@
 import { AddOrderController } from '@presentation/controllers/add-order/add-order-controller'
 import { HttpRequest, Validation } from '@presentation/controllers/add-order/add-order-controller-protocols'
+import { badRequest } from '@presentation/helpers/http/http-helpers'
 import { internet, random } from 'faker'
 
 type SutTypes = {
@@ -43,5 +44,13 @@ describe('Add Order Controller', () => {
     const request = mockRequest
     await sut.handle(request)
     expect(validateSpy).toHaveBeenCalledWith(request.body)
+  })
+
+  test('Should return 400 if Validation fails', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const request = mockRequest
+    const response = await sut.handle(request)
+    expect(response).toEqual(badRequest(new Error()))
   })
 })

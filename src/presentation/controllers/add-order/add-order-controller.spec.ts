@@ -1,6 +1,6 @@
 import { AddOrderController } from '@presentation/controllers/add-order/add-order-controller'
 import { AddOrder, HttpRequest, orderParams, Order, Validation } from '@presentation/controllers/add-order/add-order-controller-protocols'
-import { badRequest, ok } from '@presentation/helpers/http/http-helpers'
+import { badRequest, ok, serverError } from '@presentation/helpers/http/http-helpers'
 import { internet, random } from 'faker'
 
 type SutTypes = {
@@ -86,5 +86,13 @@ describe('Add Order Controller', () => {
     const request = mockRequest
     const response = await sut.handle(request)
     expect(response).toEqual(ok(mockOrder))
+  })
+
+  test('Should return 500 if AddOrder throws', async () => {
+    const { sut, addOrderStub } = makeSut()
+    jest.spyOn(addOrderStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
+    const request = mockRequest
+    const response = await sut.handle(request)
+    expect(response).toEqual(serverError(new Error()))
   })
 })

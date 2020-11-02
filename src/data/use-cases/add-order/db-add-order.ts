@@ -4,7 +4,7 @@ export class DbAddOrder implements AddOrder {
   constructor (private readonly addOrderRepository: AddOrderRepository) {}
 
   async add (data: orderParams): Promise<Order> {
-    await this.addOrderRepository.add(data)
-    return Promise.resolve(null)
+    const order = await this.addOrderRepository.add(data)
+    return order
   }
 }

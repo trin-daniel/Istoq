@@ -1,11 +1,12 @@
 import { AddOrderController } from '@presentation/controllers/add-order/add-order-controller'
-import { HttpRequest, Validation } from '@presentation/controllers/add-order/add-order-controller-protocols'
+import { AddOrder, HttpRequest, orderParams, Order, Validation } from '@presentation/controllers/add-order/add-order-controller-protocols'
 import { badRequest } from '@presentation/helpers/http/http-helpers'
 import { internet, random } from 'faker'
 
 type SutTypes = {
   sut: AddOrderController
   validationStub: Validation
+  addOrderStub: AddOrder
 }
 
 const mockRequest: HttpRequest = {
@@ -19,6 +20,13 @@ const mockRequest: HttpRequest = {
   }
 }
 
+const mockOrder: Order = {
+  id: random.uuid(),
+  account_id: mockRequest.account_id,
+  ...mockRequest.body,
+  created_at: new Date()
+}
+
 const mockValidation = (): Validation => {
   class ValidationStub implements Validation {
     validate (input: any): Error {
@@ -28,12 +36,23 @@ const mockValidation = (): Validation => {
   return new ValidationStub()
 }
 
+const mockAddOrder = (): AddOrder => {
+  class AddOrderStub implements AddOrder {
+    async add (data: orderParams): Promise<Order> {
+      return Promise.resolve(mockOrder)
+    }
+  }
+  return new AddOrderStub()
+}
+
 const makeSut = (): SutTypes => {
+  const addOrderStub = mockAddOrder()
   const validationStub = mockValidation()
-  const sut = new AddOrderController(validationStub)
+  const sut = new AddOrderController(validationStub, addOrderStub)
   return {
     sut,
-    validationStub
+    validationStub,
+    addOrderStub
   }
 }
 
@@ -52,5 +71,13 @@ describe('Add Order Controller', () => {
     const request = mockRequest
     const response = await sut.handle(request)
     expect(response).toEqual(badRequest(new Error()))
+  })
+
+  test('Should call AddOrder with correct values', async () => {
+    const { sut, addOrderStub } = makeSut()
+    const addSpy = jest.spyOn(addOrderStub, 'add')
+    const request = mockRequest
+    await sut.handle(request)
+    expect(addSpy).toHaveBeenCalledWith({ ...request.body, account_id: request.account_id })
   })
 })

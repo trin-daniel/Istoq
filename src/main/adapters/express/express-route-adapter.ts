@@ -4,7 +4,8 @@ import { Request, Response } from 'express'
 export const expressRouterAdapter = (controller: Controller) => {
   return async (req: Request, res: Response) => {
     const httpRequest: HttpRequest = {
-      body: req.body
+      body: req.body,
+      account_id: req.account_id
     }
     const httpResponse = await controller.handle(httpRequest)
     httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299

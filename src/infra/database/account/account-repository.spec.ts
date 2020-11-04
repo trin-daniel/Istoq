@@ -15,7 +15,7 @@ const makeSut = (): AccountRepository => {
 describe('Account Repository', () => {
   beforeAll(async () => await SqlHelper.connect())
   afterAll(async () => await SqlHelper.disconnect())
-  beforeEach(async () => await SqlHelper.runQuery('TRUNCATE TABLE accounts'))
+  beforeEach(async () => await SqlHelper.runQuery('delete from accounts'))
 
   test('Should return an account on add with success', async () => {
     const sut = makeSut()

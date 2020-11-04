@@ -7,7 +7,7 @@ import request from 'supertest'
 describe('SignIn Routes', () => {
   beforeAll(async () => await SqlHelper.connect())
   afterAll(async () => await SqlHelper.disconnect())
-  beforeEach(async () => await SqlHelper.runQuery('truncate table accounts'))
+  beforeEach(async () => await SqlHelper.runQuery('delete from accounts'))
 
   test('Should return 200 on signin', async () => {
     const id = random.uuid()

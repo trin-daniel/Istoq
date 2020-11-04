@@ -19,7 +19,7 @@ const mockRequest: HttpRequest = {
 describe('Order Route', () => {
   beforeAll(async () => await SqlHelper.connect())
   afterAll(async () => await SqlHelper.disconnect())
-  beforeEach(async () => await SqlHelper.runQuery('TRUNCATE TABLE orders'))
+  beforeEach(async () => await SqlHelper.runQuery('delete from orders'))
 
   test('Should return 403 if token is not provided', async () => {
     await request(app)

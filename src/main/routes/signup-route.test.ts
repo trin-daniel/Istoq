@@ -6,7 +6,7 @@ import request from 'supertest'
 describe('SignUp Routes', () => {
   beforeAll(async () => await SqlHelper.connect())
   afterAll(async () => await SqlHelper.disconnect())
-  beforeEach(async () => await SqlHelper.runQuery('truncate table accounts'))
+  beforeEach(async () => await SqlHelper.runQuery('delete from accounts'))
 
   test('Should return an account on success', async () => {
     const password = internet.password()

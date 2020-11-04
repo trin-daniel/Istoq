@@ -47,4 +47,13 @@ describe('Order Route', () => {
       .send(mockRequest.body)
       .expect(200)
   })
+
+  test('Should return 403 if invalid or expired token is provided', async () => {
+    const token = sign({ id: random.uuid() }, 'secret', { expiresIn: '1d' })
+    await request(app)
+      .post('/api/orders')
+      .set('x-access-token', token)
+      .send(mockRequest.body)
+      .expect(403)
+  })
 })

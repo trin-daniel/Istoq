@@ -9,7 +9,7 @@ export class DbAuthentication implements Authentication {
     if (account) {
       const isTrue = await this.hashComparer.compare(password, account.password)
       if (isTrue) {
-        const token = await this.encrypter.encrypt(account.id)
+        const token = this.encrypter.encrypt(account.id)
         await this.updateAccessTokenRepository.updateAccessToken(account.id, token)
         return token
       }

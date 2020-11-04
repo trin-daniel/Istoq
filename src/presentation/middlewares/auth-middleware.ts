@@ -3,9 +3,7 @@ import { AccessDeniedError } from '@presentation/errors'
 import { forbidden, ok, serverError } from '@presentation/helpers/http/http-helpers'
 
 export class AuthMiddleware implements Middleware {
-  constructor (
-    private readonly loadAccountByToken: LoadAccountByToken
-  ) {}
+  constructor (private readonly loadAccountByToken: LoadAccountByToken) {}
 
   async handle (request: HttpRequest): Promise<HttpResponse> {
     try {

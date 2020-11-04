@@ -24,7 +24,7 @@ describe('Order Route', () => {
   test('Should return 403 if token is not provided', async () => {
     await request(app)
       .post('/api/orders')
-      .send(mockRequest)
+      .send(mockRequest.body)
       .expect(403)
   })
 

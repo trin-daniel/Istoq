@@ -4,7 +4,10 @@
   "description": "sales management and control application",
   "scripts": {
     "start": "sucrase-node src/main/server.ts",
+    "start:prod":"node dist/main/server.js",
     "build": "rimraf dist && tsc -p build.json",
+    "up":"npm run build && docker-compose up",
+    "down":"npm run build && docker-compose down",
     "test": "jest --passWithNoTests --runInBand --silent --noStackTrace",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm run test -- --watch -c jest-unit-config.js",

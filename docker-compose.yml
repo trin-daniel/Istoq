@@ -1,0 +1,35 @@
+version: "3.8"
+services: 
+  mysql:
+    container_name: mysql-container
+    image: mysql:8
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment: 
+      MYSQL_ROOT_PASSWORD: QXV9UG7L
+      MYSQL_DATABASE: content_istoq
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 16503323
+    restart: "always"
+    volumes:
+      - ./database/volumes/mysql:/var/lib/mysql
+      - ./database/sql/:/docker-entrypoint-initdb.d
+    ports: 
+      - "3306:3306"
+  api:
+    container_name: istoq-api
+    image: node:12
+    working_dir: /usr/src/istoq
+    restart: "always"
+    command: bash -c "npm install --only=prod && npm run start:prod"
+    environment: 
+      - DATABASE=content_istoq
+      - JWT_SECRET=tek0uggvcB
+      - PORT=3333
+      - HOST=mysql
+    volumes: 
+      - './dist/:/usr/src/istoq/dist/'
+      - './package.json/:/usr/src/istoq/package.json'
+    ports: 
+      - "3333:3333"
+    links:
+      - mysql

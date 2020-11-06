@@ -1,8 +1,6 @@
 import 'module-alias/register'
 import { app } from '@main/config/app'
 import { SqlHelper } from '@infra/database/helpers/connection-helper'
-import { config as dotenv } from 'dotenv'
-dotenv()
 
 SqlHelper.connect()
   .then(() => {

@@ -64,8 +64,8 @@ describe('Account Repository', () => {
     const token = random.uuid()
     await sut.updateAccessToken(id, token)
     const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE id = (?)', [id])
-    expect(account[0][0]).toBeTruthy()
-    expect(account[0][0].token).toBe(token)
+    expect(account[0]).toBeTruthy()
+    expect(account[0].token).toBe(token)
   })
 
   test('Should return an account on loadByToken success', async () => {

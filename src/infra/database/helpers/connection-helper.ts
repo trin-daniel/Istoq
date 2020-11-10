@@ -1,29 +1,27 @@
-import { createPool, FieldPacket, OkPacket, Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise'
+import knexfile from '@infra/database/helpers/knexfile'
+import knex from 'knex'
 
 class ConnectionHelper {
-  private client: Pool
-  async connect (): Promise<void> {
-    const db = this.client = createPool({
-      host: '0.0.0.0',
-      user: 'root',
-      password: 'QXV9UG7L',
-      port: 3306,
-      database: process.env.DATABASE || 'test',
-      queueLimit: 0,
-      waitForConnections: true,
-      connectionLimit: 10
-    })
+  private client: knex
+
+  public async connect () {
+    if (process.env.MODE === 'production') {
+      this.client = knex(knexfile.production)
+    }
+    if (!process.env.MODE) {
+      this.client = knex(knexfile.development)
+    }
   }
 
-  async disconnect (): Promise<void> {
-    await this.client.end()
+  public async disconnect () {
+    this.client && await this.client.destroy()
     this.client = null
   }
 
-  async runQuery (sql: string, values?: Array<any>): Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]> {
+  async runQuery (sql: string, values?: Array<any>) {
     !this.client && await this.connect()
-    const rowResult = await this.client.query(sql, values)
-    return rowResult
+    const row = await this.client.raw(sql, values)
+    return row
   }
 }
 

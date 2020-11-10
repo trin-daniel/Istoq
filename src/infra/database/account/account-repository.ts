@@ -18,14 +18,12 @@ export class AccountRepository implements AddAccountRepository, LoadAccountByEma
     )
 
     const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE id = (?)', [id])
-    return account[0][0]
+    return account[0]
   }
 
   async loadByEmail (email: string): Promise<Account> {
     const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE email = (?)', [email])
-    return account[0][0]
-      ? account[0][0]
-      : null
+    return account[0] || null
   }
 
   async updateAccessToken (id: string, token: string): Promise<void> {
@@ -35,8 +33,6 @@ export class AccountRepository implements AddAccountRepository, LoadAccountByEma
 
   async loadByToken (token: string): Promise<Account> {
     const account = await SqlHelper.runQuery('SELECT * FROM accounts WHERE token = (?)', [token])
-    return account[0][0]
-      ? account[0][0]
-      : null
+    return account[0] || null
   }
 }

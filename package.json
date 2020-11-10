@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "sales management and control application",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
-    "start:prod":"node dist/main/server.js",
+    "start:dev": "sucrase-node src/main/server.ts",
+    "start:prod": "npm run build && node dist/main/server.js",
     "build": "rimraf dist && tsc -p build.json",
-    "up":"npm run build && docker-compose up",
-    "down":"npm run build && docker-compose down",
+    "migration:dev": "knex --knexfile ./src/infra/database/helpers/knexfile.ts migrate:latest",
+    "migration:prod": "knex --knexfile ./dist/infra/database/helpers/knexfile.js migrate:latest --env production",
     "test": "jest --passWithNoTests --runInBand --silent --noStackTrace",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm run test -- --watch -c jest-unit-config.js",
@@ -21,6 +21,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.8",
     "@types/faker": "^5.1.4",
     "@types/jest": "^26.0.15",
@@ -51,10 +52,13 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.12",
     "module-alias": "^2.2.2",
     "mysql2": "^2.2.5",
+    "sqlite3": "^5.0.0",
     "uuid": "^8.3.1",
     "validator": "^13.1.17"
   },

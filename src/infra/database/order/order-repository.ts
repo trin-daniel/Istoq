@@ -12,6 +12,6 @@ export class OrderRepository implements AddOrderRepository {
       'INSERT INTO orders (id, account_id, client ,product, quantity, price, discount ,created_at) VALUES (?,?,?,?,?,?,?,?)',
       [id, account_id, client, product, quantity, price, discount, created_at])
     const order = await SqlHelper.runQuery('SELECT * FROM orders WHERE id = (?)', [id])
-    return order[0][0]
+    return order[0]
   }
 }
